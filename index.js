@@ -63,6 +63,21 @@ router.get("/movies/read", (req, res) => {
 //   console.log("deleted");
 // });
 
+router.get("/movies/read/by-date", (req, res) => {
+  movies.sort((a, b) => a.year - b.year);
+  res.status(200).json({ status: 200, data: movies });
+});
+
+router.get("/movies/read/by-rating", (req, res) => {
+  movies.sort((a, b) => b.rating - a.rating);
+  res.status(200).json({ status: 200, data: movies });
+});
+
+router.get("/movies/read/by-title", (req, res) => {
+  movies.sort((a, b) => a.title.localeCompare(b.title));
+  res.status(200).json({ status: 200, data: movies });
+});
+
 app.use("/", router);
 
 const PORT = process.env.PORT || 5000;
