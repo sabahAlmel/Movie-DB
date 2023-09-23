@@ -53,6 +53,23 @@ router.get("/movies/read", (req, res) => {
   res.status(200).json({ status: 200, data: movies });
 });
 
+// return one movie
+router.get("/movies/read/id/:id", (req, res) => {
+  if (parseInt(req.params.id) <= 0 || parseInt(req.params.id) > movies.length) {
+    res
+      .status(404)
+      .json({
+        status: 404,
+        error: true,
+        message: `the movie ${req.params.id} does not exist`,
+      });
+  } else {
+    res
+      .status(200)
+      .json({ status: 200, message: movies[parseInt(req.params.id) - 1] });
+  }
+});
+
 //update
 // router.put("/movies/update/:id", (req, res) => {
 //   console.log("updated");
