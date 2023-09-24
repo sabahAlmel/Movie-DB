@@ -44,9 +44,40 @@ router.get("/search", (req, res) => {
 });
 
 // create
-// router.post("/movies/create", (req, res) => {
-//   console.log("crated");
-// });
+router.post("/movies/add", (req, res) => {
+  let title, year, rating;
+  if (req.query.title) {
+    title = req.query.title;
+  } else {
+    res.status(403).json({
+      status: 403,
+      error: true,
+      message: "you cannot create a movie without providing a title",
+    });
+  }
+  if (
+    req.query.year &&
+    req.query.year.length == 4 &&
+    !isNaN(parseInt(req.query.year))
+  ) {
+    year = parseInt(req.query.year);
+  } else {
+    res.status(403).json({
+      status: 403,
+      error: true,
+      message: "you cannot create a movie without providing a year",
+    });
+  }
+  if (req.query.rating) {
+    rating = parseInt(req.query.rating);
+  } else {
+    rating = 4;
+  }
+  if (title && year && rating) {
+    movies.push({ title: title, year: year, rating: rating });
+    res.status(200).json({ status: 200, message: movies });
+  }
+});
 
 // return all movies
 router.get("/movies/read", (req, res) => {
@@ -56,13 +87,11 @@ router.get("/movies/read", (req, res) => {
 // return one movie
 router.get("/movies/read/id/:id", (req, res) => {
   if (parseInt(req.params.id) <= 0 || parseInt(req.params.id) > movies.length) {
-    res
-      .status(404)
-      .json({
-        status: 404,
-        error: true,
-        message: `the movie ${req.params.id} does not exist`,
-      });
+    res.status(404).json({
+      status: 404,
+      error: true,
+      message: `the movie ${req.params.id} does not exist`,
+    });
   } else {
     res
       .status(200)
