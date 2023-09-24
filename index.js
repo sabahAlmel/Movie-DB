@@ -105,9 +105,18 @@ router.get("/movies/read/id/:id", (req, res) => {
 // });
 
 // delete
-// router.delete("/movies/delete/:id", (req, res) => {
-//   console.log("deleted");
-// });
+router.delete("/movies/delete/:id", (req, res) => {
+  if (req.params.id > 0 && req.params.id <= movies.length) {
+    movies.splice(parseInt(req.params.id) - 1, 1);
+    res.status(200).json({ status: 200, message: movies });
+  } else {
+    res.status(404).json({
+      status: 404,
+      error: true,
+      message: `the movie ${req.params.id} does not exist`,
+    });
+  }
+});
 
 router.get("/movies/read/by-date", (req, res) => {
   movies.sort((a, b) => a.year - b.year);
