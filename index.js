@@ -68,7 +68,7 @@ router.post("/movies/add", (req, res) => {
       message: "you cannot create a movie without providing a year",
     });
   }
-  if (req.query.rating) {
+  if (req.query.rating && !isNaN(parseInt(req.query.rating))) {
     rating = parseInt(req.query.rating);
   } else {
     rating = 4;
@@ -100,9 +100,33 @@ router.get("/movies/read/id/:id", (req, res) => {
 });
 
 //update
-// router.put("/movies/update/:id", (req, res) => {
-//   console.log("updated");
-// });
+router.put("/movies/update/:id", (req, res) => {
+  let id = req.params.id;
+  if (id > 0 && id <= movies.length) {
+    if (
+      req.query.year &&
+      req.query.year.length == 4 &&
+      !isNaN(parseInt(req.query.year))
+    )
+      req.query.year = parseInt(req.query.year);
+    else {
+      req.query.year = movies[id].year;
+    }
+    if (req.query.rating && !isNaN(parseInt(req.query.rating)))
+      req.query.rating = parseInt(req.query.rating);
+    else {
+      req.query.rating = movies[id].rating;
+    }
+    movies[id] = { ...movies[id], ...req.query };
+    res.status(200).json({ status: 200, message: movies });
+  } else {
+    res.status(404).json({
+      status: 404,
+      error: true,
+      message: `the movie ${id} does not exit`,
+    });
+  }
+});
 
 // delete
 router.delete("/movies/delete/:id", (req, res) => {
