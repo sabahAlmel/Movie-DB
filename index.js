@@ -43,6 +43,7 @@ router.get("/search", (req, res) => {
   }
 });
 
+// crud using http verbs(post, get, put, delete)
 // create
 router.post("/movies/add", (req, res) => {
   let title, year, rating;
