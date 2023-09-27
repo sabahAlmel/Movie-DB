@@ -2,6 +2,7 @@ const express = require("express");
 const moment = require("moment");
 const router = express.Router();
 const app = express();
+const Movie = require("./mongo");
 
 const movies = [
   { title: "Jaws", year: 1975, rating: 8 },
@@ -75,6 +76,13 @@ router.post("/movies/add", (req, res) => {
     rating = 4;
   }
   if (title && year && rating) {
+    // Movie.Movie.insertMany({ title, year, rating })
+    // .then((movies) => {
+    //   res.json(movies);
+    // })
+    // .catch((err) => {
+    //   res.json(err);
+    // });
     movies.push({ title: title, year: year, rating: rating });
     res.status(200).json({ status: 200, message: movies });
   }
